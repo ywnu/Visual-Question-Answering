@@ -1,0 +1,39 @@
+# Python environments and cache
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# IDE and operating system
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+config.local.json
+
+# Dataset downloads and image files (keep off GitHub)
+data/
+*.zip
+*.tar
+*.tar.gz
+*.7z
+
+# Large model artifacts
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.onnx
+*.h5
+
+# Temporary work
+*.log
+tmp/
+temp/
