@@ -1,18 +1,21 @@
-# Bayader — Frontend & Accessibility
+# Bayader — Frontend, Voice & Accessibility
 
-## Your task
-Develop the functioning web interface for blind and low-vision users. It must allow **image upload, question entry, submit, loading/error feedback, and real answer display** from Hanan's backend. Use semantic labels, keyboard-only navigation, visible focus indicators, accessible error messages, `aria-live` for announced results, sufficient contrast and responsive layout. Test with screen-reader and keyboard. Speech playback is optional after the text flow works.
+## Your responsibilities
+Build a bilingual accessible chat website with image upload, typed/spoken question and spoken/written answer.
 
-## Backend contract
-Send `FormData` with fields `image` and `question` to `POST /api/answer`. Read `{"answer":"..."}`; display `{"error":"..."}` for failures. Agree with Hanan on API base URL, CORS and deployment. Mock responses are allowed only for early development and must be explicitly identified.
+## Required data / dependencies
+HTML/CSS/JS or agreed stack; browser microphone/speech capability or agreed speech service; backend API; sample JPG only.
 
-## Data and setup
-You **do not need to download train/validation images or annotations**. Use one small sample JPG to test upload, HTML/CSS/JavaScript (or agreed frontend stack), and the backend test endpoint.
+## Expected deliverables
+Working accessible chat UI, recording/mic permission, speech-to-text and text-to-speech flow tested, error/loading handling.
 
-## Deliverables and done criteria
-Working `frontend/` code, setup/run instructions, accessibility checklist, desktop/mobile checks, and proof that a real uploaded image + question gets the true model answer through the site. Hosting is not complete until tested at the published URL.
+## Shared scope and priorities
+**P0 — Mandatory: Bilingual VQA website.** A user uploads a photo, asks in Arabic or English, and receives a genuine model-generated text answer in the conversation. The website must function end to end.
 
-## Project context
-Our goal is a **working Visual Question Answering (VQA) website** for people with visual impairments: **image + question -> textual answer**. The previously completed Logistic Regression baseline in `main.py` predicts **answerability only**, not the answer. It must not be presented as the final VQA model.
+**P1 — Mandatory: Voice interaction.** Users can ask by voice (speech-to-text) and listen to the AI answer (text-to-speech), in Arabic and English. Choose/test a speech stack early: browser Web Speech support is variable, so an alternative provider or service may be necessary. Verify mic consent, accessibility, secure hosting (HTTPS), and meaningful failure states.
 
-**Team:** Aseel (data), Jumanah (VQA model), Deem (evaluation), Hanan (backend), Bayader (frontend). Keep code on your own feature branch; raise a pull request for review before merging. The original `main.py` is already on `main`; do not overwrite it. Do not upload dataset images, archives, model weights, secrets or `.venv`.
+**P2 — Optional, only after P0/P1 work: Live camera.** Camera preview with frame capture during questioning is the first optional implementation; continuous real-time video understanding is a harder extension. Do not block mandatory deliverables on P2.
+
+**Architecture contract:** `POST /api/answer` receives multipart `image` + `question`, returns `{"answer":"..."}` or `{"error":"..."}`; `GET /api/health` returns `{"status":"ok"}`. This is a *planned interface*, not a running hosted app. Speech transcription/synthesis can initially run in the browser; confirm reliability in Arabic before deciding whether to move it server-side.
+
+**Collaboration:** feature branches + reviewed PRs into `main`; preserve existing `main.py` (question-only answerability baseline). No datasets/images, weights, secrets, or virtual environments in Git. Train/validation images and annotations come from https://vizwiz.org/tasks-and-datasets/vqa/ under its terms. The repository currently contains scaffolding/analysis; **there is no functional VQA website or speech support yet**.
