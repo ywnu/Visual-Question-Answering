@@ -1,18 +1,21 @@
 # Aseel — Data Preparation & EDA
 
-## Your task
-Continue the EDA done in `main.py` rather than repeat it. Implement a new reusable data-preparation module (`src/data_preparation.py`) that maps each image filename to the image, question, human reference answers and binary answerability label. Check missing/corrupt images, document the target-answer selection rule and preserve all reference answers for evaluation. Keep official training and validation sets separate to avoid leakage. Print counts and display a few correct image-question-answer examples.
+## Your responsibilities
+Prepare train/validation image-question-answer examples, check images, and extend—not repeat—the existing EDA.
 
-## Data you need
-From https://vizwiz.org/tasks-and-datasets/vqa/ download **train annotations (`train.json`)**, **validation annotations (`val.json`)**, **training images**, and **validation images**. Annotation fields include `image`, `question`, `answers`, `answer_type`, `answerable`. Images are large: store locally/external drive, not in GitHub. Support configurable paths instead of hardcoding `D:`.
+## Required data / dependencies
+train.json, val.json, training and validation images; local configurable paths. No image uploads to GitHub.
 
-## Interface to agree with Jumanah
-Provide a loader returning examples containing `image_path`, `question`, `reference_answers`, `target_answer`, `answerable`. Document any excluded or ambiguous samples.
+## Expected deliverables
+src/data_preparation.py; reproducible samples, data integrity counts, reference answers retained.
 
-## Deliverables and done criteria
-A tested reusable loader, local setup instructions, integrity counts, a small sample check, and a README explanation. Done when Jumanah can load both splits using her own local image paths without changing `main.py`.
+## Shared scope and priorities
+**P0 — Mandatory: Bilingual VQA website.** A user uploads a photo, asks in Arabic or English, and receives a genuine model-generated text answer in the conversation. The website must function end to end.
 
-## Project context
-Our goal is a **working Visual Question Answering (VQA) website** for people with visual impairments: **image + question -> textual answer**. The previously completed Logistic Regression baseline in `main.py` predicts **answerability only**, not the answer. It must not be presented as the final VQA model.
+**P1 — Mandatory: Voice interaction.** Users can ask by voice (speech-to-text) and listen to the AI answer (text-to-speech), in Arabic and English. Choose/test a speech stack early: browser Web Speech support is variable, so an alternative provider or service may be necessary. Verify mic consent, accessibility, secure hosting (HTTPS), and meaningful failure states.
 
-**Team:** Aseel (data), Jumanah (VQA model), Deem (evaluation), Hanan (backend), Bayader (frontend). Keep code on your own feature branch; raise a pull request for review before merging. The original `main.py` is already on `main`; do not overwrite it. Do not upload dataset images, archives, model weights, secrets or `.venv`.
+**P2 — Optional, only after P0/P1 work: Live camera.** Camera preview with frame capture during questioning is the first optional implementation; continuous real-time video understanding is a harder extension. Do not block mandatory deliverables on P2.
+
+**Architecture contract:** `POST /api/answer` receives multipart `image` + `question`, returns `{"answer":"..."}` or `{"error":"..."}`; `GET /api/health` returns `{"status":"ok"}`. This is a *planned interface*, not a running hosted app. Speech transcription/synthesis can initially run in the browser; confirm reliability in Arabic before deciding whether to move it server-side.
+
+**Collaboration:** feature branches + reviewed PRs into `main`; preserve existing `main.py` (question-only answerability baseline). No datasets/images, weights, secrets, or virtual environments in Git. Train/validation images and annotations come from https://vizwiz.org/tasks-and-datasets/vqa/ under its terms. The repository currently contains scaffolding/analysis; **there is no functional VQA website or speech support yet**.
