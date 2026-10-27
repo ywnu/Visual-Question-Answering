@@ -91,3 +91,40 @@ print(comparison.to_string(index=False))
 comparison.to_csv(OUTPUT_DIR / "answerability_model_comparison.csv", index=False)
 
 print("\nReminder: these models predict answerability, not actual VQA answers.")
+
+
+from sklearn.metrics import RocCurveDisplay
+
+plt.figure(figsize=(8, 6))
+ax = plt.gca()
+
+for name, classifier in models.items():
+    pipeline = Pipeline([
+        ("tfidf", TfidfVectorizer(
+            max_features=5000,
+            stop_words="english"
+        )),
+        ("model", classifier)
+    ])
+
+    pipeline.fit(X_train, y_train)
+
+    RocCurveDisplay.from_estimator(
+        pipeline,
+        X_test,
+        y_test,
+        ax=ax,
+        name=name
+    )
+
+plt.title("ROC Curve - Model Comparison")
+plt.grid(alpha=0.3)
+plt.tight_layout()
+
+plt.savefig(
+    OUTPUT_DIR / "roc_comparison.png",
+    dpi=300,
+    bbox_inches="tight"
+)
+
+plt.show()
