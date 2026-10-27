@@ -16,12 +16,23 @@
 - Fine-tune or compare models if justified by lab requirements and available hardware.
 - Keep the previous text-only answerability model as a supplemental baseline.
 
-## Roles not yet assigned
-- Deem
-- Hanan
-- Bayader
+### Deem — Model Training & Evaluation
+- Collaborate with Jumanah to test and improve model performance.
+- Measure answer quality on held-out VizWiz validation examples.
+- Compare experiments, document metrics and failure cases, and prepare evaluation charts.
+
+### Hanan — Backend & Integration
+- Build a backend API for image + question input and answer output.
+- Integrate the actual VQA inference module when available.
+- Validate inputs, handle errors, and coordinate deployment/testing with Bayader.
+
+### Bayader — Frontend & Accessibility
+- Build the functional website interface: image upload, question input, answer display.
+- Support accessible labels, keyboard navigation, and screen-reader use.
+- Integrate with Hanan's API, and test the full user workflow.
 
 ## Working rules
-- Each owner works on their feature branch.
+- Each owner works on her feature branch.
 - Use pull requests and review before merging into `main`.
 - Agree on image/question/answer interfaces before integration.
+- Large VizWiz images and trained model artifacts stay outside GitHub.
