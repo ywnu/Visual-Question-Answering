@@ -12,12 +12,17 @@ Course machine-learning project using the VizWiz VQA dataset. The intended syste
 ## Team roles (confirmed)
 - **Aseel** — Data Preparation & EDA.
 - **Jumanah** — VQA Model Development.
-- **Deem, Hanan, Bayader** — roles pending team discussion.
+- **Deem** — Model Training & Evaluation.
+- **Hanan** — Backend & Integration.
+- **Bayader** — Frontend & Accessibility.
 
 ## Branches
 - `main`: shared stable branch.
 - `feature/data`: Aseel's work.
 - `feature/vqa-model`: Jumanah's work.
+- `feature/evaluation`: Deem's work (to be created).
+- `feature/backend`: Hanan's work (to be created).
+- `feature/frontend`: Bayader's work (to be created).
 
 Submit work as pull requests; don't commit to `main` directly.
 
