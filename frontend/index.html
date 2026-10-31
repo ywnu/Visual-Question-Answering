@@ -1,0 +1,232 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Basir - Visual Question Answering">
+    <title>Basir | Visual Question Answering</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+    <a href="#main" class="skip-link">Skip to main content</a>
+
+    <div class="background-shapes" aria-hidden="true">
+        <div class="shape shape-one"></div>
+        <div class="shape shape-two"></div>
+        <div class="shape shape-three"></div>
+    </div>
+
+    <header class="navbar">
+        <a href="#main" class="logo" aria-label="Basir Home">
+            <span class="logo-icon" aria-hidden="true">◉</span>
+            <span>
+                Basir
+                <small>Visual Question Answering</small>
+            </span>
+        </a>
+        <button
+    type="button"
+    id="languageToggle"
+    class="language-toggle"
+    aria-label="Switch to Arabic"
+>
+    العربية
+</button>
+    </header>
+
+    <main id="main" class="main-container">
+
+        <section class="hero" aria-labelledby="main-title">
+            <h1 id="main-title">Basir</h1>
+            <p class="hero-subtitle">Visual Question Answering</p>
+            <p class="hero-description">
+                Upload or capture an image, enter a question,
+                and receive an answer about its visual content.
+            </p>
+        </section>
+
+        <section class="workspace" aria-labelledby="workspace-title">
+            <h2 id="workspace-title">Image Question Answering</h2>
+
+            <form id="vqaForm">
+
+                <fieldset class="image-fieldset">
+                    <legend>Choose an Image</legend>
+
+                    <div class="image-input-options">
+
+                        <div class="image-option">
+                            <label for="image">
+                                <span aria-hidden="true">▧</span>
+                                Upload Image
+                            </label>
+
+                            <input
+                                type="file"
+                                id="image"
+                                name="image"
+                                accept="image/png,image/jpeg"
+                                aria-describedby="imageHelp"
+                            >
+                        </div>
+
+                        <div class="image-option">
+                            <button
+                                type="button"
+                                id="openCameraBtn"
+                                class="camera-option-button"
+                            >
+                                <span aria-hidden="true">◎</span>
+                                Take Photo
+                            </button>
+                        </div>
+
+                    </div>
+
+                    <p id="imageHelp" class="help-text">
+                        Select a JPG or PNG image, or use your device camera.
+                    </p>
+                </fieldset>
+
+                <!-- Camera -->
+                <div id="cameraArea" class="camera-area" hidden>
+
+                    <video
+                        id="cameraVideo"
+                        autoplay
+                        playsinline
+                        muted
+                        aria-label="Live camera preview"
+                    ></video>
+
+                    <div class="camera-actions">
+                        <button type="button" id="capturePhotoBtn">
+                            Capture Photo
+                        </button>
+
+                        <button type="button" id="closeCameraBtn">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Selected image preview -->
+                <div id="previewArea" class="image-preview-area" hidden>
+                    <img
+                        id="preview"
+                        alt="Preview of the selected image"
+                    >
+                    <p id="imageName" class="image-name"></p>
+                </div>
+
+                <!-- Question -->
+                <label for="question" class="field-label">
+                    Enter Your Question
+                </label>
+
+                <textarea
+                    id="question"
+                    name="question"
+                    rows="3"
+                    placeholder="Type your question about the image."
+                    required
+                ></textarea>
+
+                <!-- Voice input -->
+                <div class="voice-controls">
+                    <button
+                        type="button"
+                        id="voiceButton"
+                        class="voice-button"
+                        aria-describedby="voiceStatus"
+                        aria-pressed="false"
+                    >
+                        <span aria-hidden="true">🎤</span>
+                        <span id="voiceButtonText">Ask by Voice</span>
+                    </button>
+
+                    <p id="voiceStatus" role="status" aria-live="polite">
+                        You can speak your question in English.
+                    </p>
+                </div>
+
+                <button
+                    type="submit"
+                    class="primary-button"
+                    id="askButton"
+                >
+                    Submit Question
+                </button>
+
+            </form>
+
+            <!-- Answer -->
+            <section class="answer-card" aria-labelledby="answer-title">
+                <h3 id="answer-title">Answer</h3>
+
+               <p id="answer" role="status" aria-live="polite">
+    The answer will be displayed here.
+</p>
+                <div id="answerActions" class="answer-actions" hidden>
+
+                    <button
+                        type="button"
+                        id="readAnswerBtn"
+                        class="secondary-button"
+                    >
+                        Read Answer
+                    </button>
+
+                    <button
+                        type="button"
+                        id="stopReadingBtn"
+                        class="secondary-button"
+                        hidden
+                    >
+                        Stop Reading
+                    </button>
+
+                    <button
+                        type="button"
+                        id="anotherQuestionBtn"
+                        class="secondary-button"
+                    >
+                        Ask Another Question
+                    </button>
+
+                </div>
+            </section>
+
+            <p
+                id="statusMessage"
+                class="sr-only"
+                role="status"
+                aria-live="polite"
+            ></p>
+
+        </section>
+
+        <!-- Team -->
+        <section class="team-section" aria-labelledby="team-title">
+            <h2 id="team-title">Project Team</h2>
+
+            <div class="team-grid">
+                <div class="team-member">Aseel Alotaibi</div>
+                <div class="team-member">Bayader Alotaibi</div>
+                <div class="team-member">Deem Almaneea</div>
+                <div class="team-member">Hanan Almutairi</div>
+                <div class="team-member">Jumana Alotaibi</div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        © 2026 Basir
+    </footer>
+
+</body>
+</html>
