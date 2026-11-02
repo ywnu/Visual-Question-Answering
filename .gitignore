@@ -37,3 +37,9 @@ data/
 *.log
 tmp/
 temp/
+# Local VQA test images
+test_images/
+
+# Additional model weight formats
+*.bin
+*.gguf
