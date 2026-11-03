@@ -5,11 +5,19 @@ import torch
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from PIL import Image, UnidentifiedImageError
 from transformers import BlipProcessor, BlipForQuestionAnswering
-
+from fastapi.middleware.cors import CORSMiddleware
 app = FastAPI(
     title="VQA Backend API",
     description="Visual Question Answering with BLIP",
     version="2.0.0",
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 MODEL_NAME = "Salesforce/blip-vqa-base"
