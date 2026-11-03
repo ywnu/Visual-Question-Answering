@@ -467,7 +467,13 @@ closeCameraBtn.addEventListener("click", () => {
 // Submit Question
 // ========================================
 
-form.addEventListener("submit", event => {
+// ========================================
+// Submit Question - Real Backend Integration
+// ========================================
+
+const API_URL = "http://127.0.0.1:8000/ask";
+
+form.addEventListener("submit", async event => {
     event.preventDefault();
 
     if (!selectedImage) {
@@ -479,31 +485,87 @@ form.addEventListener("submit", event => {
 
     if (!form.reportValidity()) return;
 
+    const question = questionInput.value.trim();
+
+    if (!question) {
+        questionInput.focus();
+        return;
+    }
+
     stopReading();
 
     submitButton.disabled = true;
+    answerActions.hidden = true;
+    answerIsDemo = false;
+
     answer.textContent = t("processing");
     announce(t("processingNotice"));
 
-    // Temporary response until backend integration.
-    const demoAnswer = t("demo");
+    const formData = new FormData();
 
-    answer.textContent = demoAnswer;
-    answer.lang = currentLanguage;
-    answer.dir = currentLanguage === "ar" ? "rtl" : "ltr";
+    formData.append("image", selectedImage);
+    formData.append("question", question);
 
-    answerIsDemo = true;
-    answerActions.hidden = false;
+    try {
+        const response = await fetch(API_URL, {
+            method: "POST",
+            body: formData
+        });
 
-    if (!speechSupported) {
-        readAnswerBtn.disabled = true;
-        readAnswerBtn.title = t("playbackUnavailable");
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.detail ||
+                `Server error: ${response.status}`
+            );
+        }
+
+        if (typeof data.answer !== "string") {
+            throw new Error("Invalid answer received.");
+        }
+
+        const realAnswer = data.answer.trim();
+
+        if (!realAnswer) {
+            throw new Error("The model returned an empty answer.");
+        }
+
+        answer.textContent = realAnswer;
+
+        // BLIP currently generates English answers.
+        answer.lang = "en";
+        answer.dir = "ltr";
+
+        answerActions.hidden = false;
+
+        if (!speechSupported) {
+            readAnswerBtn.disabled = true;
+            readAnswerBtn.title = t("playbackUnavailable");
+        } else {
+            readAnswerBtn.disabled = false;
+        }
+
+        announce(t("demoNotice") + realAnswer);
+
+    } catch (error) {
+        console.error("Backend connection error:", error);
+
+        const errorMessage =
+            currentLanguage === "ar"
+                ? "تعذر الحصول على الإجابة. تأكدي أن السيرفر يعمل وحاولي مرة أخرى."
+                : "Unable to get an answer. Make sure the backend is running and try again.";
+
+        answer.textContent = errorMessage;
+        answer.lang = currentLanguage;
+        answer.dir = currentLanguage === "ar" ? "rtl" : "ltr";
+
+        answerActions.hidden = true;
+        announce(errorMessage);
+
+    } finally {
+        submitButton.disabled = false;
     }
-
-    submitButton.disabled = false;
-
-    // Announce the result to screen readers.
-    announce(t("demoNotice") + demoAnswer);
 });
 
 // ========================================
