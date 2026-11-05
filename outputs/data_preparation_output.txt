@@ -1,0 +1,63 @@
+C:\ProgramData\anaconda3\python.exe C:\Users\KUNYSR\Desktop\vqa_project\src\data_preparation.py 
+
+=== TRAIN ===
+annotations: C:\Users\KUNYSR\Desktop\vqa_project\data\train.json
+images:      C:\Users\KUNYSR\Desktop\vqa_project\data\images
+  [train] checked 2000/20523 images
+  [train] checked 4000/20523 images
+  [train] checked 6000/20523 images
+  [train] checked 8000/20523 images
+  [train] checked 10000/20523 images
+  [train] checked 12000/20523 images
+  [train] checked 14000/20523 images
+  [train] checked 16000/20523 images
+  [train] checked 18000/20523 images
+  [train] checked 20000/20523 images
+  [train] checked 20523/20523 images
+
+=== VAL ===
+annotations: C:\Users\KUNYSR\Desktop\vqa_project\data\val.json
+images:      C:\Users\KUNYSR\Desktop\vqa_project\data\images_val
+  [val] checked 2000/4319 images
+  [val] checked 4000/4319 images
+  [val] checked 4319/4319 images
+
+=== DATA INTEGRITY COUNTS ===
+                                       train         val
+rows_raw                               20523        4319
+missing_image                              0           0
+missing_question                           0           0
+missing_answerable                         0           0
+empty_questions                            0           0
+invalid_labels                             0           0
+conflicting_label_rows                     0           0
+exact_duplicate_rows                       0           0
+rows_without_answers                       0           0
+rows_unexpected_answer_count               0           0
+rows_after_cleaning                    20523        4319
+images_checked                         20523        4319
+images_missing                             0           0
+images_unreadable                          0           0
+rows_with_bad_image                        0           0
+rows_final                             20523        4319
+answerable_rate_final                   0.73       0.679
+
+=== LEAKAGE BETWEEN TRAIN AND VAL ===
+{'images_in_both_splits': 0, 'image_question_pairs_in_both_splits': 0}
+
+=== TRAIN VS VAL ===
+split                         train       val
+questions                 20523.000  4319.000
+images                    20523.000  4319.000
+answerable_rate               0.730     0.679
+mean_words                    6.674     7.169
+mean_questions_per_image      1.000     1.000
+mean_answer_agreement         0.567     0.574
+mean_unanswerable_share       0.273     0.317
+mean_brightness             110.663   108.899
+mean_sharpness              597.495   634.378
+oov_token_rate_vs_train         NaN     0.016
+
+Everything saved to: C:\Users\KUNYSR\Desktop\vqa_project\outputs\data_preparation
+
+Process finished with exit code 0
