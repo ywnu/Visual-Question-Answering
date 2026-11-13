@@ -18,14 +18,14 @@ A fully functioning, accessible bilingual **Arabic/English** AI website for peop
 
 **Locally prepared, not integrated:** training photos have been extracted to an external drive. They are NOT linked in code yet.
 
-**In progress / NOT built:** actual model that generates VQA answers; image-question-answer loader; bilingual capability verification; functioning frontend/backend; microphone input, speech output, hosted site, and live camera. The supplemental SVM comparison code is on Deem's evaluation branch, but results are NOT yet measured.
+**In progress / NOT built:** actual model that generates VQA answers; image-question-answer loader; bilingual capability verification; functioning frontend/backend; microphone input, speech output, hosted site, and live camera. The supplemental SVM comparison code is on Diyam's evaluation branch, but results are NOT yet measured.
 
 ### Team responsibilities
 | Member | Role | Branch | English instructions | Arabic instructions |
 | --- | --- | --- | --- | --- |
 | Aseel | Data Preparation & EDA | `feature/data` | [English](../../tree/feature/data) | [العربية](../../blob/feature/data/README_AR.md) |
 | Jumanah | VQA Model Development | `feature/vqa-model` | [English](../../tree/feature/vqa-model) | [العربية](../../blob/feature/vqa-model/README_AR.md) |
-| Deem | Model Training & Evaluation | `feature/evaluation` | [English](../../tree/feature/evaluation) | [العربية](../../blob/feature/evaluation/README_AR.md) |
+| Diyam | Model Training & Evaluation | `feature/evaluation` | [English](../../tree/feature/evaluation) | [العربية](../../blob/feature/evaluation/README_AR.md) |
 | Hanan | Backend & Integration | `feature/backend` | [English](../../tree/feature/backend) | [العربية](../../blob/feature/backend/README_AR.md) |
 | Bayader | Frontend & Accessibility | `feature/frontend` | [English](../../tree/feature/frontend) | [العربية](../../blob/feature/frontend/README_AR.md) |
 
@@ -41,7 +41,7 @@ Use pull requests from feature branches to main. Keep huge VizWiz JPGs, model we
 1. Aseel implements reproducible image/question/reference answer preparation; Jumanah proves bilingual VQA inference on a real image.
 2. Hanan and Bayader deliver a **clearly marked mock** end-to-end website request, later replaced by real model outputs.
 3. Add/test Arabic and English microphone transcription + speech output.
-4. Deem evaluates real answer quality and documents measured metrics.
+4. Diyam evaluates real answer quality and documents measured metrics.
 5. Deploy HTTPS and verify the live website; only then attempt optional camera mode.
 
 ## العربية
