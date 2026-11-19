@@ -193,7 +193,7 @@ def build_summary(results, records, sample_path, image_dir, api_url):
     }
 
 
-def run_evaluation(records, image_dir, api_url, timeout, output_path, summary_path):
+def run_evaluation(records, sample_path, image_dir, api_url, timeout, output_path, summary_path):
     try:
         import requests
     except ImportError as exc:
@@ -210,6 +210,8 @@ def run_evaluation(records, image_dir, api_url, timeout, output_path, summary_pa
         health_response = requests.get(health_url, timeout=min(timeout, 20))
         health_response.raise_for_status()
         health_data = health_response.json()
+        if not isinstance(health_data, dict):
+            raise ValueError("BLIP API health response must be a JSON object.")
     except requests.RequestException as exc:
         raise RuntimeError(
             f"BLIP API health check failed at {health_url}: {exc}"
@@ -296,6 +298,8 @@ def run_evaluation(records, image_dir, api_url, timeout, output_path, summary_pa
                     result["http_status"] = response.status_code
                     response.raise_for_status()
                     payload = response.json()
+                    if not isinstance(payload, dict):
+                        raise ValueError("BLIP API response must be a JSON object.")
                     answer = payload.get("answer", "")
                     if not isinstance(answer, str):
                         answer = str(answer)
@@ -350,7 +354,7 @@ def run_evaluation(records, image_dir, api_url, timeout, output_path, summary_pa
                 f"seconds={result['response_seconds']}"
             )
 
-    summary = build_summary(results, records, DEFAULT_SAMPLE, image_dir, api_url)
+    summary = build_summary(results, records, sample_path, image_dir, api_url)
     summary_path.write_text(
         json.dumps(summary, ensure_ascii=False, indent=2),
         encoding="utf-8",
@@ -413,6 +417,7 @@ def main():
 
         run_evaluation(
             records=records,
+            sample_path=args.sample_csv,
             image_dir=args.image_dir,
             api_url=args.api_url,
             timeout=args.timeout,
