@@ -22,8 +22,10 @@ Exact Match uses lowercase + whitespace normalization, matching the earlier Week
 ## Files
 
 - `experiments/evaluate_blip_week12.py` — fixed-sample BLIP evaluator and preflight checker.
-- `outputs/blip_week12_100.csv` — per-question results.
-- `outputs/blip_week12_100_summary.json` — aggregate and subgroup metrics.
+- `experiments/compare_week12_models.py` — validates and compares both models on the shared sample.
+- `outputs/blip_week12_100.csv` — per-question BLIP results.
+- `outputs/qwen_week12_100.csv` — per-question Qwen results, produced by Jumanah's updated evaluator.
+- `outputs/blip_qwen_week12_comparison.csv` and `outputs/blip_qwen_week12_summary.json` — comparison outputs.
 
 ## Setup
 
@@ -78,9 +80,19 @@ Jumanah's Qwen run must use the same 100 image filenames, questions, reference a
 
 Keep the raw answer text. Do not compare BLIP and Qwen using different samples or different reference sets.
 
+## Step 4 — compare both models
+
+After both result files exist, run:
+
+```bash
+python experiments/compare_week12_models.py
+```
+
+The comparison script checks that both result files use the exact same image-question pairs, retains missing results as failures, and calculates overall, answerable, and unanswerable metrics.
+
 ## Final comparison
 
-Once both runs exist, calculate:
+Review:
 - Completed requests and failures
 - Exact Match overall
 - Exact Match on answerable items
