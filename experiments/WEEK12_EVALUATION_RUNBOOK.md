@@ -37,7 +37,7 @@ Set the local image folder if it differs from the previous Week 11 location:
 
 **Windows PowerShell**
 ```powershell
-$env:BASIR_IMAGE_DIR = "D:\\ML_Datasets\\val\\val"
+$env:BASIR_IMAGE_DIR = "D:\ML_Datasets\val\val"
 ```
 
 Install the request dependency if needed:
