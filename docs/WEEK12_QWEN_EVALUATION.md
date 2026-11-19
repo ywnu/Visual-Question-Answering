@@ -17,6 +17,22 @@ The evaluation was run in Google Colab using a **Tesla T4 GPU** (approximately 1
 
 **Crucial distinction:** The committed `src/vqa_model.py` is still the CPU-oriented version (`dtype=torch.float32` without `device_map="cuda"`). The Colab checkout was patched *locally* for `dtype=torch.float16`, `device_map="cuda"`, `inputs.to("cuda")`, and the chat-template system-message compatibility adjustment. The Colab GPU patch is **not committed** as a production implementation, so checking out this branch and running the evaluator without those changes does **not** reproduce the T4 evaluation setup.
 
+## Verified Colab GPU test environment (20 November 2026)
+
+The user reported these versions **after successfully running the freshly fetched `src/vqa_model_gpu.py` module** on a VizWiz image. This is a verified post-evaluation smoke-test environment; it does not establish that the initial 57 predictions were generated with the exact same library versions.
+
+| Component | Version / detail |
+| --- | --- |
+| PyTorch | `2.14.1+cu130` |
+| Transformers | `4.57.6` |
+| Pillow | `11.3.0` |
+| Accelerate | `1.15.0` |
+| PyTorch CUDA runtime | `13.0` |
+| CUDA available | `True` |
+| GPU | NVIDIA Tesla T4 |
+
+**GitHub GPU smoke-test result:** In a separate subprocess the module loaded on the T4, answered `VizWiz_val_00000642.jpg` (`What is in this picture?`) with a description of a laptop and keyboard, and exited with code 0. Startup emitted nonfatal warnings about an optional CUDA driver stub, fast image processor defaults, and an ignored generation flag. This shows successful model import and single-image inference, **not** full API integration or a measured accuracy score.
+
 ## How the 100 rows were obtained
 
 1. Downloaded Aseel's fixed 100-question CSV from `feature/data`. Added a stable 16-character SHA-256-derived ID of `image + "\\n" + question` for each row; retained the original question, reference answers, answerability label, and row order.
