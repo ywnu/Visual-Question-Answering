@@ -78,5 +78,5 @@ print("longer than 30 words", (words > 30).sum())
 print("longer than 50 words", (words > 50).sum())
 print("uncertainty phrasing", a.str.contains(uncertainty, case=False, regex=True).sum())
 print("hedging phrasing", a.str.contains(hedging, case=False, regex=True).sum())
-print("punctuation-only", a.str.fullmatch(r"[^\\w\\s]+").sum())
+print("punctuation-only", a.str.fullmatch(r"[^\w\s]+").sum())
 ```
