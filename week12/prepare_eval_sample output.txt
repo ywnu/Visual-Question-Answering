@@ -1,0 +1,26 @@
+C:\ProgramData\anaconda3\python.exe C:\Users\KUNYSR\Desktop\vqa_project\src\prepare_eval_sample.py 
+
+=== IMAGE VALIDATION ===
+Total records checked: 4319
+image_status
+ok    4319
+Name: count, dtype: int64
+
+Valid records: 4319
+Excluded records: 0
+
+=== EVALUATION SAMPLE ===
+Total records: 100
+Seed: 42
+
+Class distribution:
+answerable
+0    32
+1    68
+Name: count, dtype: int64
+
+Saved files:
+C:\Users\KUNYSR\Desktop\vqa_project\outputs\evaluation\evaluation_sample_100_checked.json
+C:\Users\KUNYSR\Desktop\vqa_project\outputs\evaluation\evaluation_sample_100_checked.csv
+
+Process finished with exit code 0
