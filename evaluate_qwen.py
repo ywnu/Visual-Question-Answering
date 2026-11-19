@@ -6,7 +6,7 @@ from pathlib import Path
 from PIL import Image
 
 
-def evaluate(input_csv, images_dir, output_csv):
+def evaluate(input_csv, images_dir, output_csv, use_gpu=False):
     # Read the evaluation dataset
     with open(input_csv, "r", encoding="utf-8-sig", newline="") as file:
         samples = list(csv.DictReader(file))
@@ -47,7 +47,10 @@ def evaluate(input_csv, images_dir, output_csv):
             with Image.open(image_path) as img:
                 image = img.convert("RGB")
 
-            from src.vqa_model import answer_question
+            if use_gpu:
+                from src.vqa_model_gpu import answer_question
+            else:
+                from src.vqa_model import answer_question
             start = time.perf_counter()
             answer = answer_question(image, question)
             elapsed = time.perf_counter() - start
@@ -105,6 +108,12 @@ if __name__ == "__main__":
         default="qwen_evaluation_results.csv",
     )
 
+    parser.add_argument(
+        "--gpu",
+        action="store_true",
+        help="Use CUDA FP16 module with capped image resolution (requires an NVIDIA GPU).",
+    )
+
     args = parser.parse_args()
 
-    evaluate(args.input, args.images_dir, args.output)
+    evaluate(args.input, args.images_dir, args.output, use_gpu=args.gpu)
