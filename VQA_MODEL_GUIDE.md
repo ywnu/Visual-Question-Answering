@@ -75,16 +75,29 @@ Observed results included:
 
 These are preliminary functional tests, not a full accuracy evaluation.
 
-## 6. Performance
+## 6. GPU Setup and Performance
 
-The model was initially tested on a CPU-only laptop.
+- Model: `Qwen/Qwen2.5-VL-3B-Instruct`
+- Tested GPU: NVIDIA Tesla T4 with 14.56 GiB available in Colab
+- GPU configuration: CUDA, FP16, `attn_implementation="eager"`
+- Tested Colab versions: PyTorch `2.11.0+cu130`, Transformers `4.57.6`
+- GPU memory allocated after loading: approximately 7.0 GiB
 
-Observed response times ranged from approximately 7 to 16 minutes per question.
+### Reproduce the Colab test
 
-**Important:** These timings are not suitable for real-time deployment.
+1. Open the [Basir evaluation notebook](https://colab.research.google.com/drive/1gUBXoOK_eIM1ak04f6B5LdawOCe94NOe?usp=sharing).
+2. Select **Runtime → Change runtime type** and choose **T4 GPU**.
+3. Select **Runtime → Run all**. The first run downloads the model weights.
+4. Check the final cell for the Arabic and English answers and timings.
 
-GPU-based inference is planned for the project demonstration. GPU performance has not yet been measured.
+A fresh Colab session measured 11.59 seconds for one English question and
+4.83 seconds for one Arabic question on the same image. Each timing covers
+one call to `answer_question()` after model loading. The Arabic answer mixed
+scripts and ended mid-sentence.
 
+For backend integration, use `answer_question(image, question) -> str`.
+The Colab notebook applies the GPU and chat-template compatibility changes
+to its checkout. FastAPI integration with Qwen is pending verification.
 ## 7. Backend Integration
 
 The backend can import the main function:
