@@ -4,12 +4,15 @@ from io import BytesIO
 import torch
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
 from PIL import Image, UnidentifiedImageError
-from transformers import BlipProcessor, BlipForQuestionAnswering
 from fastapi.middleware.cors import CORSMiddleware
+
+from models.blip_model import load_blip_model, generate_answer
+
+
 app = FastAPI(
     title="VQA Backend API",
     description="Visual Question Answering with BLIP",
-    version="2.0.0",
+    version="2.1.0",
 )
 
 app.add_middleware(
@@ -20,9 +23,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-MODEL_NAME = "Salesforce/blip-vqa-base"
-
-# Load the model once when the application starts
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
 processor = None
@@ -35,10 +35,7 @@ def load_model():
 
     print(f"Loading VQA model on {device}...")
 
-    processor = BlipProcessor.from_pretrained(MODEL_NAME)
-    model = BlipForQuestionAnswering.from_pretrained(MODEL_NAME)
-    model = model.to(device)
-    model.eval()
+    processor, model = load_blip_model(device)
 
     print("VQA model loaded successfully!")
 
@@ -47,7 +44,7 @@ def load_model():
 def home():
     return {
         "message": "VQA Backend is running!",
-        "model": MODEL_NAME,
+        "model": "Salesforce/blip-vqa-base",
         "device": device,
     }
 
@@ -101,22 +98,13 @@ async def ask_question(
         )
 
     try:
-        inputs = processor(
+        answer = generate_answer(
+            processor,
+            model,
             image_rgb,
             question,
-            return_tensors="pt",
-        ).to(device)
-
-        with torch.no_grad():
-            output = model.generate(
-                **inputs,
-                max_new_tokens=30,
-            )
-
-        answer = processor.decode(
-            output[0],
-            skip_special_tokens=True,
-        ).strip()
+            device,
+        )
 
     except Exception as error:
         print(f"VQA inference error: {error}")
@@ -131,7 +119,7 @@ async def ask_question(
         "image_filename": image.filename,
         "image_info": image_info,
         "answer": answer,
-        "model": MODEL_NAME,
+        "model": "Salesforce/blip-vqa-base",
         "model_connected": True,
         "device": device,
     }
