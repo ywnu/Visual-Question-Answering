@@ -1,0 +1,68 @@
+{
+  "total_items": 100,
+  "answerable_items": 68,
+  "unanswerable_items": 32,
+  "blip": {
+    "overall": {
+      "items": 100,
+      "requests_completed": 100,
+      "request_failures": 0,
+      "empty_answers": 0,
+      "exact_matches": 31,
+      "exact_match_rate_percent": 31.0,
+      "mean_response_seconds": 0.784
+    },
+    "answerable": {
+      "items": 68,
+      "requests_completed": 68,
+      "request_failures": 0,
+      "empty_answers": 0,
+      "exact_matches": 27,
+      "exact_match_rate_percent": 39.71,
+      "mean_response_seconds": 0.746
+    },
+    "unanswerable": {
+      "items": 32,
+      "requests_completed": 32,
+      "request_failures": 0,
+      "empty_answers": 0,
+      "exact_matches": 4,
+      "exact_match_rate_percent": 12.5,
+      "mean_response_seconds": 0.865
+    }
+  },
+  "qwen": {
+    "overall": {
+      "items": 100,
+      "requests_completed": 100,
+      "request_failures": 0,
+      "empty_answers": 0,
+      "exact_matches": 5,
+      "exact_match_rate_percent": 5.0,
+      "mean_response_seconds": 3.085
+    },
+    "answerable": {
+      "items": 68,
+      "requests_completed": 68,
+      "request_failures": 0,
+      "empty_answers": 0,
+      "exact_matches": 5,
+      "exact_match_rate_percent": 7.35,
+      "mean_response_seconds": 2.837
+    },
+    "unanswerable": {
+      "items": 32,
+      "requests_completed": 32,
+      "request_failures": 0,
+      "empty_answers": 0,
+      "exact_matches": 0,
+      "exact_match_rate_percent": 0.0,
+      "mean_response_seconds": 3.611
+    }
+  },
+  "metric_note": "Exact Match uses lowercase + whitespace normalization against any of the sample's reference answers. It is not official VizWiz VQA accuracy or semantic accuracy. Review outputs against the images before choosing a model.",
+  "missing_results": {
+    "blip": 0,
+    "qwen": 0
+  }
+}
