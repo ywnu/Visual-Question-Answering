@@ -1,81 +1,115 @@
-# Visual Question Answering for People with Visual Impairments
-**Machine Learning course team project — planning and integration in progress.**
+# Basir | Visual Question Answering
 
-[English](#english) | [العربية](#العربية)
+Basir is a Machine Learning course project for people who are blind or have low vision. Upload an image, ask a question about it, and get a text answer with optional spoken playback.
 
-## English
-### What we are building
-A fully functioning, accessible bilingual **Arabic/English** AI website for people who are blind or have low vision. Users upload an image, type or speak their question, and receive a real AI-generated textual answer, with optional spoken playback (voice interaction is required).
+[Quick start](#quick-start) · [English demo](#english-demo) · [Evaluation](#evaluation) · [العربية](#العربية)
 
-**Priority 0 — Required:** bilingual chat, image upload, questions and genuine VQA-generated text answers through the website.
+## Current status
 
-**Priority 1 — Required:** bilingual Arabic/English spoken questions (speech-to-text) and spoken answers (text-to-speech), with permissions and accessible error handling. Test actual Arabic browser compatibility early; use an alternative service if necessary.
+- **Verified locally:** Upload a JPG, submit a typed English question, view the BLIP answer, and hear the answer with **Read Answer**. The interface includes a keyboard skip link, labeled inputs, and live status updates for screen readers.
+- **Voice input:** **Ask by Voice** returned “Speech recognition is unavailable” during the local check with microphone access allowed. Typed input remains available. The team is also reviewing the playback voice.
+- **Pending verification:** Arabic answer quality, Arabic speech input and playback, camera capture, and the final integrated release.
 
-**Priority 2 — Optional/stretch:** live camera preview and frame capture while asking. Fully continuous video conversation is beyond the minimum target. Do not block priorities 0–1.
+[Week 13 integration check](https://github.com/ywnu/Visual-Question-Answering/blob/feature/evaluation/experiments/WEEK13_INTEGRATION_CHECKS.md)
 
-### Actual progress (Oct 2026)
-**Done:** problem and VizWiz dataset selection; basic EDA with 20,523 annotated training samples (5 fields), no null values, no duplicate image-question records in the checked dataset; class distribution (14,991 answerable, 5,532 unanswerable); question length/word-count features; question-only TF-IDF + Logistic Regression answerability baseline (about 67.8% accuracy on a held-out 20% split); classification report and confusion-matrix code. Original analysis is in [main.py](main.py). GitHub feature branches and bilingual task instructions have been created.
+## Quick start
 
-**Locally prepared, not integrated:** training photos have been extracted to an external drive. They are NOT linked in code yet.
+You need Git, Python 3.11, a browser, and internet access on the first run to download the BLIP weights. The frontend and backend are currently on separate feature branches.
 
-**In progress / NOT built:** actual model that generates VQA answers; image-question-answer loader; bilingual capability verification; functioning frontend/backend; microphone input, speech output, hosted site, and live camera. The supplemental SVM comparison code is on Diyam's evaluation branch, but results are NOT yet measured.
+### 1. Start the backend
 
-### Team responsibilities
-| Member | Role | Branch | English instructions | Arabic instructions |
-| --- | --- | --- | --- | --- |
-| Aseel | Data Preparation & EDA | `feature/data` | [English](../../tree/feature/data) | [العربية](../../blob/feature/data/README_AR.md) |
-| Jumanah | VQA Model Development | `feature/vqa-model` | [English](../../tree/feature/vqa-model) | [العربية](../../blob/feature/vqa-model/README_AR.md) |
-| Diyam | Model Training & Evaluation | `feature/evaluation` | [English](../../tree/feature/evaluation) | [العربية](../../blob/feature/evaluation/README_AR.md) |
-| Hanan | Backend & Integration | `feature/backend` | [English](../../tree/feature/backend) | [العربية](../../blob/feature/backend/README_AR.md) |
-| Bayader | Frontend & Accessibility | `feature/frontend` | [English](../../tree/feature/frontend) | [العربية](../../blob/feature/frontend/README_AR.md) |
+From a folder where you want to keep both worktrees:
 
-### Integration contract (planned)
-- `GET /api/health` -> `{"status":"ok"}`.
-- `POST /api/answer` accepts multipart form-data fields `image` (JPG/PNG) + `question` (Arabic/English text); returns `{"answer":"..."}` or appropriate `{"error":"..."}`.
-- `answer_question(image, question) -> str` is the intended Python VQA interface.
-- Browser voice transcription and playback may be used, with fallback if Arabic support fails.
+```sh
+git clone https://github.com/ywnu/Visual-Question-Answering.git basir
+cd basir
+git worktree add --detach ../basir-backend origin/feature/backend
+git worktree add --detach ../basir-frontend origin/feature/frontend
+cd ../basir-backend
+python -m venv .venv
+```
 
-Use pull requests from feature branches to main. Keep huge VizWiz JPGs, model weights, API secrets and virtual environments OUT of Git. Get data from https://vizwiz.org/tasks-and-datasets/vqa/ following provider terms.
+Activate the virtual environment with `source .venv/bin/activate` on macOS or Linux, or `.venv\Scripts\Activate.ps1` in Windows PowerShell. If your platform uses `python3` for Python, substitute that command before activation.
 
-### Next milestones
-1. Aseel implements reproducible image/question/reference answer preparation; Jumanah proves bilingual VQA inference on a real image.
-2. Hanan and Bayader deliver a **clearly marked mock** end-to-end website request, later replaced by real model outputs.
-3. Add/test Arabic and English microphone transcription + speech output.
-4. Diyam evaluates real answer quality and documents measured metrics.
-5. Deploy HTTPS and verify the live website; only then attempt optional camera mode.
+```sh
+python -m pip install -r requirements.txt
+python -m uvicorn vqa_api:app --host 127.0.0.1 --port 8000
+```
+
+Leave this terminal running. Open [backend health](http://127.0.0.1:8000/health) and check that `model_loaded` is `true` before submitting a question. The backend chooses CUDA when available and otherwise uses the CPU.
+
+### 2. Start the website
+
+In a second terminal, enter `basir-frontend` from the same parent folder:
+
+```sh
+cd basir-frontend
+python -m http.server 8080 --bind 127.0.0.1 --directory frontend
+```
+
+Open [Basir locally](http://127.0.0.1:8080/). Keep the backend on port 8000 because the current frontend targets `http://127.0.0.1:8000/ask`.
+
+## English demo
+
+| Step | What to do |
+| --- | --- |
+| 1 | Upload `VizWiz_val_00000642.jpg` from the VizWiz validation image set. |
+| 2 | Type `what is in this picture?` and select **Submit Question**. |
+| 3 | The verified local run displayed **laptop**. Select **Read Answer** to hear it. |
+
+The [Week 14 demo draft (MP4)](docs/demo/Basir_English_Demo.mp4) replays this documented run using the original image and result screenshot. The short answer audio was recreated for the replay. The final demo will be recorded after the integrated flow is retested.
+
+Image credit: `VizWiz_val_00000642.jpg` by the [VizWiz team](https://vizwiz.org/tasks-and-datasets/vqa/), used under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). The image was resized for display in the video.
+
+[VizWiz VQA dataset](https://vizwiz.org/tasks-and-datasets/vqa/) · [Documented test](https://github.com/ywnu/Visual-Question-Answering/blob/feature/evaluation/experiments/WEEK13_INTEGRATION_CHECKS.md)
+
+## API
+
+| Route | Request | Response fields used by the demo |
+| --- | --- | --- |
+| `GET /health` | No body | `status`, `model_loaded`, `device` |
+| `POST /ask` | Multipart form with `image` and `question` | `success`, `answer`, `model`, `device` |
+
+[Interactive API docs (local)](http://127.0.0.1:8000/docs) · [Backend source](https://github.com/ywnu/Visual-Question-Answering/blob/feature/backend/vqa_api.py)
+
+## Evaluation
+
+### Visual question answering
+
+BLIP and Qwen ran on the same 100 VizWiz validation examples, including 68 answerable and 32 unanswerable questions. For Exact Match, the evaluator lowercases and normalizes whitespace in the output and checks the full answer against the reference strings.
+
+| Measure | Salesforce/blip-vqa-base | Qwen2.5-VL-3B-Instruct |
+| --- | ---: | ---: |
+| Completed predictions | 100/100 | 100/100 |
+| Exact Match, all questions | 31/100 (31%) | 5/100 (5%) |
+| Exact Match, answerable | 27/68 | 5/68 |
+| Exact Match, unanswerable | 4/32 | 0/32 |
+| Mean recorded response time | 0.784 s (CPU) | 3.085 s (Tesla T4) |
+
+These timings reflect different hardware and operating conditions. Qwen used two image-resolution settings across the run. Exact Match can also miss visually correct answers. For example, Qwen read **Caffè Verona**, while the matcher preserved accents and the closest reference was `caffe verona`. The current English demo uses BLIP. Final model selection is pending team validation of the integrated flow.
+
+[Week 12 evaluation report and visual examples](https://github.com/ywnu/Visual-Question-Answering/blob/feature/evaluation/experiments/WEEK12_EVALUATION_REPORT.md) · [Reproduction runbook](https://github.com/ywnu/Visual-Question-Answering/blob/feature/evaluation/experiments/WEEK12_EVALUATION_RUNBOOK.md)
+
+### Question-only answerability baseline
+
+TF-IDF features from the question text were used to classify whether a question was answerable. On a stratified held-out split of 4,105 records, Logistic Regression reached **67.82% accuracy** and **0.6345 macro F1**. Linear SVM reached **67.92% accuracy** and **0.6334 macro F1**.
+
+[Answerability results](https://github.com/ywnu/Visual-Question-Answering/blob/feature/evaluation/experiments/ANSWERABILITY_RESULTS.md)
+
+## Team
+
+| Member | Responsibility | Work branch |
+| --- | --- | --- |
+| Aseel | Data preparation and exploratory analysis | [feature/data](https://github.com/ywnu/Visual-Question-Answering/tree/feature/data) |
+| Jumanah | VQA model development | [feature/vqa-model](https://github.com/ywnu/Visual-Question-Answering/tree/feature/vqa-model) |
+| Diyam | Model training and evaluation | [feature/evaluation](https://github.com/ywnu/Visual-Question-Answering/tree/feature/evaluation) |
+| Hanan | Backend and integration | [feature/backend](https://github.com/ywnu/Visual-Question-Answering/tree/feature/backend) |
+| Bayader | Frontend and accessibility | [feature/frontend](https://github.com/ywnu/Visual-Question-Answering/tree/feature/frontend) |
+
+Keep model weights, dataset images, virtual environments, and secrets outside Git. Obtain the dataset from [VizWiz](https://vizwiz.org/tasks-and-datasets/vqa/) and follow its terms.
 
 ## العربية
-### فكرة المشروع
-بناء **موقع فعّال ومتوافق مع متطلبات إمكانية الوصول** لمساعدة المكفوفين وضعاف البصر. المستخدم يرفع صورة، ويسأل كتابة أو بصوته **بالعربي أو الإنجليزي**، ويحصل على **إجابة فعلية من نموذج يفهم الصورة والسؤال** تظهر في المحادثة، مع القدرة على سماع الإجابة صوتيًا.
 
-**الأولوية P0 — أساسية:** موقع محادثة يدعم رفع الصور والسؤال الكتابي بالعربي والإنجليزي وإجابات VQA حقيقية.
+**بصير** مشروع لمساعدة المكفوفين وضعاف البصر على طرح أسئلة عن الصور. المسار اللي تأكدنا منه محليًا هو رفع صورة وكتابة سؤال بالإنجليزي، ثم عرض الإجابة وسماعها بزر **Read Answer**. إدخال السؤال بالصوت يحتاج إعادة اختبار، ومسار الإجابة بالعربي ينتظر التحقق من الجودة.
 
-**الأولوية P1 — أساسية:** سؤال صوتي وتحويل الكلام لنص، وقراءة الإجابة صوتيًا بالعربي والإنجليزي. لازم نختبر دعم العربية والميكروفون وإذن المستخدم ونجهز بديلًا إذا لم يدعم المتصفح بعض الوظائف.
-
-**الأولوية P2 — اختيارية:** تشغيل معاينة الكاميرا والتقاط صورة وقت السؤال. تحليل الفيديو باستمرار مثل مكالمة مباشرة ميزة إضافية أصعب، ولا تؤخر الأساسيات.
-
-### وش خلصنا فعلًا؟
-- اخترنا VizWiz وفكرة المشروع.
-- حللنا 20,523 سجل تدريب، وفحصنا القيم الناقصة والتكرارات وتوزيع الفئات؛ عندنا 14,991 قابل للإجابة و5,532 غير قابل للإجابة.
-- حسبنا طول السؤال وعدد الكلمات، ونفّذنا TF-IDF وLogistic Regression لتصنيف **قابلية الإجابة فقط**؛ دقته نحو 67.8% في تقسيم اختبار 20%، مع Classification Report وConfusion Matrix.
-- رفعنا `main.py` على GitHub، وأنشأنا خمسة Branches وREADME بالعربي والإنجليزي لكل بنت.
-- فكّينا ضغط صور التدريب على هاردسك خارجي، **لكن ما ربطناها بالكود**.
-
-### وش باقي؟
-**لم ننفذ حتى الآن** نموذج VQA يعطي الإجابة نفسها، ولا ربط الصور بالأسئلة والإجابات، ولا موقع يعمل، ولا مدخلات صوتية أو رد صوتي أو دعم عربي مؤكد، ولا استضافة. تجربة SVM موجود كودها في فرع ديم لكن **لم نشغلها ونقيس نتائجها**.
-
-### تقسيم الفريق
-- **أسيل — `feature/data`:** Data Preparation & EDA. تكمل التحليل السابق وتجهز الصور والأسئلة والإجابات.
-- **جمانه — `feature/vqa-model`:** تطوير نموذج VQA بالعربي والإنجليزي.
-- **ديم — `feature/evaluation`:** تدريب/تحسين النموذج وتقييم الإجابات والمقارنات.
-- **حنان — `feature/backend`:** API وربط النموذج والواجهة والصوت عند الحاجة.
-- **بيادر — `feature/frontend`:** المحادثة والموقع والتصميم وإمكانية الوصول وواجهة الصوت.
-
-كل بنت تراجع `README.md` و`README_AR.md` داخل فرعها. لا نرفع الصور الكبيرة أو الأوزان ولا نعدّل `main.py` القديم عشوائيًا. نستخدم Pull Requests بعد المراجعة.
-
-### خطة العمل القادمة
-1. تجهيز بيانات الصور والأسئلة والإجابات، وبالتوازي تشغيل نموذج VQA حقيقي بالعربي والإنجليزي على صورة.
-2. بناء الموقع وAPI مع رد تجريبي **موسوم بوضوح** ثم استبداله بالنموذج الحقيقي.
-3. تشغيل الصوت: سؤال مسموع وجواب مسموع باللغتين.
-4. تقييم دقة الإجابات ثم نشر الموقع واختباره.
-5. إذا خلصت الأساسيات، نضيف وضع الكاميرا الاختياري.
+للتشغيل، افتحي طرفيتين حسب [خطوات التشغيل](#quick-start). شغّلي الـAPI على المنفذ `8000` والواجهة على المنفذ `8080`. بعد ما يجهز النموذج، افتحي [واجهة بصير المحلية](http://127.0.0.1:8080/) وجربي صورة اللابتوب. اكتبي `what is in this picture?`، اضغطي **Submit Question**، وبعد ما تظهر إجابة **laptop** اضغطي **Read Answer**.
