@@ -13,7 +13,15 @@ The frontend from `feature/frontend` was served locally and sent requests to the
 | Select **Read Answer** | Pass | The tester confirmed hearing the word “laptop.” |
 | Assess playback quality | Follow-up | The tester requested a voice adjustment after hearing the answer. |
 
-This check covers one English image, a typed question, the displayed answer, and audible playback. English microphone input and Arabic answer generation are separate checks that remain to be recorded.
+This check covers one English image, a typed question, the displayed answer, and audible playback. Arabic answer generation remains to be checked.
+
+## English microphone input
+
+| Step | Outcome | Evidence |
+| --- | --- | --- |
+| Select **Ask by Voice** and speak a question | Fail in this environment | Microphone permission was set to Allow. The page displayed `Speech recognition is unavailable.` and no transcript appeared in the question field. |
+
+The [frontend recognition handler](https://github.com/ywnu/Visual-Question-Answering/blob/feature/frontend/frontend/script.js#L679-L690) maps the observed message to the browser recognition error `network`. The browser's underlying failure remains undiagnosed. The typed-question and answer-playback checks passed separately.
 
 ## Playback follow-up
 
