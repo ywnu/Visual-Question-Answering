@@ -1,3 +1,23 @@
+### Backend implementation — Hanan
+
+**Status: Implemented and tested locally**
+
+- Framework: FastAPI.
+- VQA model: Salesforce/blip-vqa-base.
+- Model library: PyTorch and Transformers.
+- Image processing: Pillow.
+- `GET /` — Returns API information and device status.
+- `GET /health` — Returns backend health and model loading status.
+- `POST /ask` — Accepts multipart form-data containing:
+  - `question`: Text question.
+  - `image`: Uploaded image.
+- Response includes the generated answer, question, image information, model name, and device.
+- CORS is enabled for frontend integration.
+- Five API tests passed using pytest.
+
+**Frontend integration:** The frontend should send a POST request to `/ask` using multipart form-data with `question` and `image` fields.
+
+**Note:** The API has been tested locally. Production deployment and full frontend integration are still pending.
 # Visual Question Answering for People with Visual Impairments
 **Machine Learning course team project — planning and integration in progress.**
 
@@ -79,3 +99,4 @@ Use pull requests from feature branches to main. Keep huge VizWiz JPGs, model we
 3. تشغيل الصوت: سؤال مسموع وجواب مسموع باللغتين.
 4. تقييم دقة الإجابات ثم نشر الموقع واختباره.
 5. إذا خلصت الأساسيات، نضيف وضع الكاميرا الاختياري.
+>>>>>>> origin/main
